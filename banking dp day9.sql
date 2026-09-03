@@ -1,0 +1,568 @@
+create database BankingDB;
+use BankingDB;
+select database();
+CREATE TABLE Customers
+(
+    CustomerID INT primary key,      
+    FirstName VARCHAR(50),
+    LastName VARCHAR(50),
+    Email VARCHAR(100),
+    Phone VARCHAR(15),
+    accountcreationdate date
+);
+drop table customers;
+describe customers; 
+create table transactions (
+transactionid int,
+transactiondate date,
+amount decimal (10,2),
+transactiontype varchar (20) );
+create table branches (
+branchid int,
+branchname varchar (100),
+branchaddress varchar (200),
+branchphone varchar (15)
+);
+create table accountbranches (
+assignmentdate date
+);
+create table loans (
+loanid int,
+loanamount decimal (10,2),
+intrestrate decimal (5,2),
+startdate date,
+enddate date
+); 
+use sakila; 
+
+ALTER TABLE Customers
+ADD DateOfBirth DATE;
+ALTER TABLE Customers
+MODIFY Phone VARCHAR(20);
+ALTER TABLE Accounts
+ADD CONSTRAINT chk_MinBalance
+CHECK (Balance >= 1000);
+CREATE TABLE Accounts (
+    AccountID INT,
+    AccountType VARCHAR(20),
+    Balance DECIMAL(10,2)
+);
+DROP TABLE AccountBranches;
+ALTER TABLE Customers
+ADD PRIMARY KEY (CustomerID);
+ALTER TABLE Accounts
+ADD CustomerID INT;
+
+ALTER TABLE Accounts
+ADD CONSTRAINT FK_Accounts_Customers
+FOREIGN KEY (CustomerID)
+REFERENCES Customers(CustomerID);
+ALTER TABLE Accounts
+ADD CustomerID INT;
+
+ALTER TABLE Accounts
+ADD CONSTRAINT FK_Accounts_Customers
+FOREIGN KEY (CustomerID)
+REFERENCES Customers(CustomerID);
+describe customers;
+
+ALTER TABLE Accounts
+ADD CustomerID INT;
+alter table transactions
+add accountid int;
+alter table transactions
+add accountid int;
+alter table accounts
+add constraint pk_accounts
+primary key(accountid);
+alter table transactions
+add constraint pk_transactions
+primary key(transactionid);
+alter table transactions
+add constraint fk_transactions_accounts
+foreign key(accountid)
+references accounts(accountid);
+ALTER TABLE loans
+ADD CustomerID INT;
+CREATE TABLE Loans (
+    LoanID INT,
+    LoanAmount DECIMAL(10,2),
+    InterestRate DECIMAL(5,2),
+    StartDate DATE,
+    EndDate DATE
+);
+alter table loans
+add constraint fk_loans_customers
+foreign key (customerid)
+references customers(customerid);
+desc loans;
+alter table loans
+add constraint pk_loans
+primary key(loanid);
+select * from customers;
+desc customers;
+alter table customers add column pan varchar(20);
+alter table customers add column pan varchar(20) first;
+alter table customers add column pan varchar(20) after email;
+alter table customers modify column pan varchar(50);
+
+alter table customers drop column pan;
+ALTER TABLE Accounts
+ADD branchID INT;
+alter table branches
+add primary key (branchid);
+ALTER TABLE Accounts
+ADD CONSTRAINT FK_Accounts_branch1
+FOREIGN KEY (branchID)
+REFERENCES branches(branchID);
+INSERT INTO Customers
+VALUES
+(101,'Rahul','Sharma','rahul@gmail.com','9876543210','2006-05-15','1998-04-15');
+
+INSERT INTO Customers
+VALUES
+(102,'Bhavyaa','Shree','bhavyaa@gmail.com','7598474217','2026-11-18','2002-07-15');
+
+INSERT INTO Customers
+VALUES
+(102,'Bhavyaa','Shree','bhavyaa@gmail.com','7598474217','2026-11-18','2002-07-15');
+insert into accounts
+(accountid, customerid, accounttype, balance)
+values
+(201,101,'Savings',25000);
+
+insert into accounts
+(accountid, customerid, accounttype, balance)
+values
+(202,102,'current',10000);
+INSERT INTO Customers(customerid,email,phone)
+values(103,'hi@gmail.com',1234567891),(104,'hello@gmail.com',0987654321);
+
+
+
+insert into accounts
+
+
+
+
+
+UPDATE Customers
+SET Phone='9999999999'
+WHERE CustomerID=101;
+SELECT * FROM Customers
+WHERE CustomerID = 101;
+UPDATE Customers
+SET Email='rahul.sharma@gmail.com'
+WHERE CustomerID=101;
+SELECT * FROM Customers
+WHERE CustomerID = 101;
+DELETE FROM Accounts
+WHERE AccountID = 202;
+SELECT * FROM Accounts;
+
+SELECT *
+FROM Accounts
+WHERE AccountType = 'Savings';
+SELECT *
+FROM Customers
+WHERE CustomerID IN (101,102,103);
+use bankingdb;
+select * from customers
+order by firstname asc;
+select * from accounts
+order by balance desc;
+select distinct accounttype
+ from accounts;
+ select * from accounts
+ order by balance desc
+ limit 3;
+ select * from transactions
+ limit 5 offset 2;
+ select * from customers 
+ where phone is null;
+ select * from customers
+ where email is not null;
+ SELECT AccountID,
+       Balance,
+       CASE
+           WHEN Balance >= 50000 THEN 'Premium Account'
+           WHEN Balance >= 25000 THEN 'Standard Account'
+           ELSE 'Basic Account'
+       END AS AccountCategory
+FROM Accounts;
+SELECT AccountID,
+       Balance,
+       RANK() OVER (ORDER BY Balance DESC) AS BalanceRank
+FROM Accounts;
+SELECT TransactionID,
+       Amount,
+       SUM(Amount) OVER (ORDER BY TransactionDate) AS RunningTotal
+FROM Transactions;
+SELECT TransactionID,
+       Amount,
+       AVG(Amount) OVER () AS AverageTransaction
+FROM Transactions;
+insert into transactions values 
+(301,'2025-05-10',5000,'Deposit',201),
+(303,'2025-05-12',10000,'Deposit',203),
+(304,'2025-05-13',3000,'Withdraw',204),
+(305,'2025-05-14',7000,'Deposit',205);
+SELECT *
+FROM Customers
+WHERE FirstName LIKE 'A%';
+SELECT *
+FROM Customers
+WHERE Email LIKE '%gmail%';
+SELECT *
+FROM Customers
+WHERE LastName LIKE '%kar';
+SELECT *
+FROM Accounts
+WHERE AccountType IN ('Savings', 'Current');
+SELECT *
+FROM Transactions
+WHERE TransactionType IN ('Deposit', 'Withdrawal');
+SELECT *
+FROM Customers
+WHERE CustomerID IN (101,102,105);
+-- Retrieve Records for Selected Account Types
+SELECT *
+FROM Accounts
+WHERE AccountType IN ('Savings', 'Current');
+
+SELECT *
+FROM Accounts
+WHERE AccountType IN ('Savings', 'Salary');
+
+-- Retrieve Transactions for Selected Transaction Types
+SELECT *
+FROM Transactions
+WHERE TransactionType IN ('Deposit', 'Withdrawal');
+
+SELECT *
+FROM Transactions
+WHERE TransactionType IN ('Deposit', 'Payment');
+
+-- Retrieve Records for Selected Customers
+SELECT *
+FROM Customers
+WHERE CustomerID IN (101,102,105);
+
+SELECT *
+FROM Customers
+WHERE CustomerID  NOT IN (101,102,105);
+
+use bankingdb;
+
+-- Display Customers in Ascending Order of Last Name
+SELECT *
+FROM Customers
+ORDER BY LastName ASC;
+
+-- Display Accounts with Highest Balance First
+SELECT *
+FROM Accounts
+ORDER BY Balance DESC;
+
+-- Display Transactions Sorted by Transaction Date
+SELECT *
+FROM Transactions
+ORDER BY TransactionDate DESC;
+
+-- Display Only Top 5 Highest Balance Accounts
+SELECT *
+FROM Accounts
+ORDER BY Balance DESC
+LIMIT 5;
+
+-- Display First 3 Customer Records
+SELECT *
+FROM Customers
+LIMIT 3;
+
+-- Skip Initial Transaction Records While Viewing Data
+SELECT *
+FROM Transactions
+LIMIT 5 OFFSET 3;
+
+-- Display Savings Account Customers Sorted by Balance
+SELECT *
+FROM Accounts
+WHERE AccountType = 'Savings'
+ORDER BY Balance DESC;
+
+-- Search Customers Using Partial Name and Limit Results
+SELECT *
+FROM Customers
+WHERE FirstName LIKE 'S%'
+LIMIT 5;
+
+-- Display Selected Transactions in Sorted Order
+SELECT *
+FROM Transactions
+WHERE TransactionType IN ('Deposit','Withdrawal')
+ORDER BY TransactionDate DESC;     
+SELECT ROUND(1256.75) AS Rounded_Value;
+SELECT CEIL(1256.25) AS Ceiling_Value;
+SELECT FLOOR(1256.75) AS Floor_Value;
+SELECT ABS(-2500) AS Absolute_Value;
+SELECT MOD(25,4) AS Remainder;
+
+-- comparison function
+select * from customers;
+SELECT
+    FirstName,
+    DateOfBirth,
+    IF(YEAR(DateOfBirth) <= 1995,
+       'Adult',
+       'Young') AS Category
+FROM Customers; 
+
+ -- displays all customer firstname in uppercase
+    SELECT FIRSTNAME,
+    UPPER(FIRSTNAME) AS UpperCaseName
+    FROM CUSTOMERS;
+    
+-- displays the length of name
+ SELECT FIRSTNAME,
+    length(FIRSTNAME) AS length_Name
+    FROM CUSTOMERS;
+
+-- displays all customer name in lowercase
+ SELECT FIRSTNAME,
+    lower(FIRSTNAME) AS lowerCaseName
+    FROM CUSTOMERS;
+    
+use bankingdb;
+    
+-- to get year out of DOB in data
+    select customerid,
+    year(dateofbirth) as birth_year
+    from customers;
+    
+    -- to get month out of DOB in data
+    select customerid,
+    month(dateofbirth) as birth_month
+    from customers;
+    
+-- to get date diiferenece between 2 dates
+     select customerid,
+datediff(curdate(),dateofbirth) as days
+    from customers;
+    
+
+update customers set phone=null where customerid=103;
+    select * from customers;
+    
+
+SELECT 
+    firstname, 
+    IFNULL(phone, 'Not Available') AS PhoneNumber
+FROM
+    customers;
+    SELECT GREATEST('1998-03-23','2000-09-20','1995-06-18','1997-09-12','1993-11-25') AS LATESTBD;
+    
+    
+    SELECT greatest('HELLO','HI','BYE','ZEE');
+    SELECT least('HELLO','HI','BYE','ZEE');
+    select ascii('s');
+    select ascii('S');
+    select ascii('$');
+    select ascii('-');
+    select ascii(1);
+    
+-- nullif = "make it null if it satisfy the confition" (diff from ifnull)
+select firstname,
+    nullif(firstname,'Priya') as result
+    from customers;
+ use product;
+
+-- DATE FUNCTION
+select now();
+select curdate();
+select curtime();
+select year(curdate());
+select month(curdate());
+select day(curdate());
+
+select hour(now());
+select minute(now());
+select second(now());
+
+-- TO ADD TIME INTERVAL
+select date_add(curdate(),interval 7 day);
+select date_add(curdate(),interval 7 month);
+select date_add(curdate(),interval 7 year);
+
+select date_sub(curdate(),interval 7 day);
+select date_add(curdate(),interval -7 day);
+select date_sub(curdate(),interval 7 month);
+
+
+select date_format(curdate(),'%d-%m-%Y'); -- 'Y' gives 2026 fully
+select date_format(curdate(),'%d-%m-%y'); -- 'y' give only 26 as year
+select date_format(curdate(),'%d-%M-%Y'); -- 'M' giveS month in name
+select date_format(curdate(),'%D-%M-%Y'); -- 'D' gives day with suffix
+select dayname(curdate());
+select monthname(curdate()) as month;
+
+select timestampdiff(year,'2001-12-13',curdate());
+select timestampdiff(month,'2001-12-13',now());
+select timestampdiff(day,'2002-07-15',now());
+select timestampdiff(year,'2002-07-15',now());
+select timestampdiff(second,'2002-07-15',now());
+select  * from accounts;
+select sum(balance) as total_amount from accounts;
+
+select sum(balance) from accounts;
+Select
+    LoanID,
+    CustomerID, LoanAmount, RANK() OVER(
+        ORDER BY LoanAmount DESC
+    ) AS LoanRank
+FROM Loans;
+
+insert into loans
+(loanid,loanamount,intrestrate,startdate,enddate,customerid)
+values
+(301,500000,8.50,'2025-01-15','2030-01-15',101),
+(302,300000,9.25,'2025-02-10','2028-02-10',102),
+(303,750000,8.75,'2025-03-20','2032-03-20',103),
+(304,250000,10.00,'2025-04-05','2029-04-05',104),
+(305,1000000,7.95,'2025-05-12','2035-05-12',105);
+select * from loans;
+SELECT
+    LoanID,
+    CustomerID,
+    LoanAmount,
+    DENSE_RANK() OVER(
+        ORDER BY LoanAmount DESC
+    ) AS DenseRank
+FROM Loans;
+SELECT
+    LoanID,
+    CustomerID,
+    LoanAmount,
+    ROW_NUMBER() OVER(
+        ORDER BY LoanAmount DESC
+    ) AS RowNumber
+FROM Loans;
+SELECT
+    LoanID, CustomerID,LoanAmount,
+    SUM(LoanAmount) OVER(
+        ORDER BY LoanAmount DESC
+    ) AS RunningTotal
+FROM Loans;
+SELECT
+    LoanID,
+    CustomerID,
+    LoanAmount,
+    LAG(LoanAmount) OVER(
+        ORDER BY LoanAmount DESC
+    ) AS PreviousLoanAmount
+FROM Loans;
+SELECT
+    LoanID, CustomerID, LoanAmount,
+    LEAD(LoanAmount) OVER(
+        ORDER BY LoanAmount DESC
+    ) AS NextLoanAmount
+FROM Loans;
+SELECT
+    a.AccountID, a.AccountType, a.Balance,
+    t.TransactionID,
+    t.TransactionDate,
+    t.TransactionType,
+    t.Amount
+FROM Accounts a
+INNER JOIN Transactions t
+ON a.AccountID = t.AccountID;
+DESC transactions;
+
+desc accounts;
+SELECT
+    a.AccountID, a.AccountType, a.Balance,
+    t.TransactionID,
+    t.TransactionDate,
+    t.TransactionType,
+    t.Amount
+FROM Accounts a
+LEFT JOIN Transactions t
+ON a.AccountID = t.AccountID;
+
+
+select  * from accounts;
+insert into accounts(accountid,accounttype,balance,customerid)
+values(206,'savings',20000,102);
+SELECT
+    a.AccountID, a.AccountType, a.Balance,
+    t.TransactionID,
+    t.TransactionDate,
+    t.TransactionType,
+    t.Amount
+FROM Accounts a
+inner join Transactions t
+ON a.AccountID = t.AccountId
+where t.transactiontype = 'deposit';
+-- generate high balance
+SELECT
+    a.AccountID, a.AccountType, a.Balance,
+    t.TransactionID,
+    t.TransactionDate,
+    t.TransactionType,
+    t.Amount
+FROM Accounts a
+INNER JOIN Transactions t
+ON a.AccountID = t.AccountID
+WHERE a.balance>30000
+order by a.balance desc;
+select * 
+select avg(Amount)
+FROM Transactions;
+SELECT *
+FROM Transactions
+WHERE Amount >
+(
+    SELECT AVG(Amount)
+    FROM Transactions
+);
+
+SELECT
+    AccountID,
+    AccountType,
+    Balance,
+    CustomerID
+FROM Accounts
+WHERE Balance >
+(
+    SELECT AVG(Balance)
+    FROM Accounts
+)
+ORDER BY Balance DESC;
+SELECT
+    AccountID,
+    AccountType,
+    Balance,
+    CustomerID
+FROM Accounts
+WHERE AccountID IN
+(
+    SELECT AccountID
+    FROM Transactions
+    WHERE TransactionType = 'Deposit'
+);
+select 
+accountid,
+accounttype,
+balance,
+customerid
+from accounts
+where balance =
+(
+select max(balance)
+from accounts
+);
+
+
+
+
+
